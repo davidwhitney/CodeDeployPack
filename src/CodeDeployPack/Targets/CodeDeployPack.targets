@@ -1,0 +1,95 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask TaskName="CodeDeployPack.CreateCodeDeployPackage" AssemblyFile="CodeDeployPack.dll" />
+  <UsingTask TaskName="CodeDeployPack.GetAssemblyVersionInfo" AssemblyFile="CodeDeployPack.dll" />
+
+  <!-- Hook into the AfterBuild activity -->
+  <PropertyGroup>
+    <BuildDependsOn>
+      $(BuildDependsOn);
+      CodeDeployPack
+    </BuildDependsOn>
+  </PropertyGroup>
+  
+  <!--
+  Configuration properties - you can override these from the command line
+  -->
+  <PropertyGroup>
+    <CodeDeployPackImported>true</CodeDeployPackImported>
+
+    <RunCodeDeployPack Condition="'$(RunCodeDeployPack)'==''">false</RunCodeDeployPack>
+    <CodeDeployPackIncludeTypeScriptSourceFiles Condition="'$(CodeDeployPackIncludeTypeScriptSourceFiles)'==''">false</CodeDeployPackIncludeTypeScriptSourceFiles>
+    <CodeDeployPackNuSpecFileName Condition="'$(CodeDeployPackNuSpecFileName)' == ''"></CodeDeployPackNuSpecFileName>
+    <CodeDeployPackAppendToPackageId Condition="'$(CodeDeployPackAppendToPackageId)' == ''"></CodeDeployPackAppendToPackageId>
+    <CodeDeployPackAppendToVersion Condition="'$(CodeDeployPackAppendToVersion)' == ''"></CodeDeployPackAppendToVersion>
+    <CodeDeployPackReleaseNotesFile Condition="'$(CodeDeployPackReleaseNotesFile)' == ''"></CodeDeployPackReleaseNotesFile>
+    <CodeDeployPackNuGetExePath Condition="'$(CodeDeployPackNuGetExePath)' == ''"></CodeDeployPackNuGetExePath>
+    <CodeDeployPackPublishPackageToFileShare Condition="'$(CodeDeployPackPublishPackageToFileShare)' == ''"></CodeDeployPackPublishPackageToFileShare>
+    <CodeDeployPackPublishPackageToHttp Condition="'$(CodeDeployPackPublishPackageToHttp)' == ''"></CodeDeployPackPublishPackageToHttp>
+    <CodeDeployPackPublishApiKey Condition="'$(CodeDeployPackPublishApiKey)' == ''"></CodeDeployPackPublishApiKey>
+    <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''"></CodeDeployPackPackageVersion>
+    <CodeDeployPackNuGetArguments Condition="'$(CodeDeployPackNuGetArguments)' == ''"></CodeDeployPackNuGetArguments>
+    <CodeDeployPackNugetProperties Condition="'$(CodeDeployPackNuGetProperties)' == ''"></CodeDeployPackNugetProperties>
+    <CodeDeployPackEnforceAddingFiles Condition="'$(CodeDeployPackEnforceAddingFiles)' == ''">false</CodeDeployPackEnforceAddingFiles>
+    <CodeDeployPackNuGetPushProperties Condition="'$(CodeDeployPackNuGetPushProperties)' == ''"></CodeDeployPackNuGetPushProperties>
+    <CodeDeployPackPublishPackagesToTeamCity Condition="'$(CodeDeployPackPublishPackagesToTeamCity)' == ''">true</CodeDeployPackPublishPackagesToTeamCity>
+    <CodeDeployPackProjectName Condition="'$(CodeDeployPackProjectName)' == ''">$(MSBuildProjectName)</CodeDeployPackProjectName>
+    <CodeDeployPackIgnoreNonRootScripts Condition="'$(CodeDeployPackIgnoreNonRootScripts)' == ''">false</CodeDeployPackIgnoreNonRootScripts>
+    <CodeDeployPackAppConfigFileOverride Condition="'$(CodeDeployPackAppConfigFileOverride)' == ''">$(TargetDir)$(TargetFileName).config</CodeDeployPackAppConfigFileOverride>
+    <CodeDeployPackAppendProjectToFeed Condition="'$(CodeDeployPackAppendProjectToFeed)' == ''">false</CodeDeployPackAppendProjectToFeed>
+    <CodeDeployPackUseFileVersion Condition="'$(CodeDeployPackUseFileVersion)' == ''">false</CodeDeployPackUseFileVersion>
+    <CodeDeployPackUseProductVersion Condition="'$(CodeDeployPackUseProductVersion)' == ''">false</CodeDeployPackUseProductVersion>
+  </PropertyGroup>
+
+  <!-- 
+  Create CodeDeploy package
+  -->
+  <Target Name="CodeDeployPack" Condition="$(RunCodeDeployPack)">
+    <GetAssemblyVersionInfo UseFileVersion="$(CodeDeployPackUseFileVersion)" UseProductVersion="$(CodeDeployPackUseProductVersion)" AssemblyFiles="$(TargetPath)" Condition="'$(CodeDeployPackPackageVersion)' == ''">
+      <Output TaskParameter="AssemblyVersionInfo" ItemName="AssemblyVersions"/>
+    </GetAssemblyVersionInfo>
+    <PropertyGroup>
+      <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''">%(AssemblyVersions.Version)</CodeDeployPackPackageVersion>
+    </PropertyGroup>
+    <PropertyGroup>
+      <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''"><!-- Use the value from nuspec, or 1.0.0 if not in NuSpec --></CodeDeployPackPackageVersion>
+    </PropertyGroup>
+	
+    <Message Text="Using package version: $(CodeDeployPackPackageVersion)" />
+
+    <ItemGroup>
+      <CodeDeployPackWrittenFiles Include="@(FileWrites)" Exclude="$(IntermediateOutputPath)**\*" />
+      <CodeDeployPackWrittenFiles Include="@(FileWritesShareable)" Exclude="$(IntermediateOutputPath)**\*" />
+      
+      <CodeDeployPackContentFiles Include="@(Content)" />
+      <CodeDeployPackContentFiles Include="@(TypeScriptCompile)" />
+    </ItemGroup>
+    
+    <CreateCodeDeployPackPackage
+      NuSpecFileName="$(CodeDeployPackNuSpecFileName)"
+      AppendToPackageId="$(CodeDeployPackAppendToPackageId)"
+      AppendToVersion="$(CodeDeployPackAppendToVersion)"
+      ContentFiles="@(CodeDeployPackContentFiles)"
+      OutDir="$(OutDir)"
+      ProjectDirectory="$(MSBuildProjectDirectory)"
+      ProjectName="$(CodeDeployPackProjectName)"
+      PackageVersion="$(CodeDeployPackPackageVersion)"
+      PrimaryOutputAssembly="$(TargetPath)"
+      ReleaseNotesFile="$(CodeDeployPackReleaseNotesFile)"
+      NuGetExePath="$(CodeDeployPackNuGetExePath)"
+      NuGetArguments="$(CodeDeployPackNuGetArguments)"
+      NuGetProperties="$(CodeDeployPackNuGetProperties)"
+      EnforceAddingFiles="$(CodeDeployPackEnforceAddingFiles)"
+      PublishPackagesToTeamCity="$(CodeDeployPackPublishPackagesToTeamCity)"
+      WrittenFiles="@(CodeDeployPackWrittenFiles)"
+      IncludeTypeScriptSourceFiles="$(CodeDeployPackIncludeTypeScriptSourceFiles)"
+      IgnoreNonRootScripts="$(CodeDeployPackIgnoreNonRootScripts)"
+      AppConfigFile="$(CodeDeployPackAppConfigFileOverride)"
+      >
+      <Output TaskParameter="Packages" ItemName="CodeDeployPackBuiltPackages" />
+      <Output TaskParameter="NuGetExePath" PropertyName="CodeDeployPackNuGetExePath" />
+    </CreateCodeDeployPackPackage>
+
+    <Message Text="Built package: @(CodeDeployPackBuiltPackages)" Importance="Low" />
+    <Message Text="NuGet.exe: $(CodeDeployPackNuGetExePath)" Importance="Low" />
+ </Target>
+</Project>
