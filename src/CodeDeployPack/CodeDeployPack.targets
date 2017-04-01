@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="CodeDeployPack.CreateCodeDeployPackage" AssemblyFile="CodeDeployPack.dll" />
-  <UsingTask TaskName="CodeDeployPack.GetAssemblyVersionInfo" AssemblyFile="CodeDeployPack.dll" />
+  <UsingTask TaskName="CodeDeployPack.CreateCodeDeployPackage" AssemblyFile="bin\Debug\CodeDeployPack.dll" />
+  <UsingTask TaskName="CodeDeployPack.GetAssemblyVersionInfo" AssemblyFile="bin\Debug\CodeDeployPack.dll" />
 
   <!-- Hook into the AfterBuild activity -->
   <PropertyGroup>
@@ -16,7 +16,7 @@
   <PropertyGroup>
     <CodeDeployPackImported>true</CodeDeployPackImported>
 
-    <RunCodeDeployPack Condition="'$(RunCodeDeployPack)'==''">false</RunCodeDeployPack>
+    <RunCodeDeployPack Condition="'$(RunCodeDeployPack)'==''">true</RunCodeDeployPack>
     <CodeDeployPackIncludeTypeScriptSourceFiles Condition="'$(CodeDeployPackIncludeTypeScriptSourceFiles)'==''">false</CodeDeployPackIncludeTypeScriptSourceFiles>
     <CodeDeployPackNuSpecFileName Condition="'$(CodeDeployPackNuSpecFileName)' == ''"></CodeDeployPackNuSpecFileName>
     <CodeDeployPackAppendToPackageId Condition="'$(CodeDeployPackAppendToPackageId)' == ''"></CodeDeployPackAppendToPackageId>
@@ -64,7 +64,7 @@
       <CodeDeployPackContentFiles Include="@(TypeScriptCompile)" />
     </ItemGroup>
     
-    <CreateCodeDeployPackPackage
+    <CreateCodeDeployPackage
       NuSpecFileName="$(CodeDeployPackNuSpecFileName)"
       AppendToPackageId="$(CodeDeployPackAppendToPackageId)"
       AppendToVersion="$(CodeDeployPackAppendToVersion)"
@@ -87,7 +87,7 @@
       >
       <Output TaskParameter="Packages" ItemName="CodeDeployPackBuiltPackages" />
       <Output TaskParameter="NuGetExePath" PropertyName="CodeDeployPackNuGetExePath" />
-    </CreateCodeDeployPackPackage>
+    </CreateCodeDeployPackage>
 
     <Message Text="Built package: @(CodeDeployPackBuiltPackages)" Importance="Low" />
     <Message Text="NuGet.exe: $(CodeDeployPackNuGetExePath)" Importance="Low" />

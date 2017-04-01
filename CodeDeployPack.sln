@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeDeployPack", "src\CodeDeployPack\CodeDeployPack.csproj", "{8565BA53-4EA2-49C9-AEB2-535F2C65A527}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{54CE2774-D8B5-4B03-9622-06AFE92D1F41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{CED7F831-6272-42F3-9843-4035E88F0FCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeDeployPack.SampleWebApp", "samples\CodeDeployPack.SampleWebApp\CodeDeployPack.SampleWebApp.csproj", "{E8EA425E-C2DE-4862-8ADC-2601FEEB80AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{51A00075-62C7-4E8D-A048-3D25B38C09BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeDeployPack.Test.Unit", "tests\CodeDeployPack.Test.Unit\CodeDeployPack.Test.Unit.csproj", "{871A8CD2-F63E-464E-B89A-03BC20EE8B7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +25,20 @@ Global
 		{8565BA53-4EA2-49C9-AEB2-535F2C65A527}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8565BA53-4EA2-49C9-AEB2-535F2C65A527}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8565BA53-4EA2-49C9-AEB2-535F2C65A527}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8EA425E-C2DE-4862-8ADC-2601FEEB80AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8EA425E-C2DE-4862-8ADC-2601FEEB80AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8EA425E-C2DE-4862-8ADC-2601FEEB80AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{871A8CD2-F63E-464E-B89A-03BC20EE8B7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{871A8CD2-F63E-464E-B89A-03BC20EE8B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{871A8CD2-F63E-464E-B89A-03BC20EE8B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{871A8CD2-F63E-464E-B89A-03BC20EE8B7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8565BA53-4EA2-49C9-AEB2-535F2C65A527} = {54CE2774-D8B5-4B03-9622-06AFE92D1F41}
+		{E8EA425E-C2DE-4862-8ADC-2601FEEB80AC} = {CED7F831-6272-42F3-9843-4035E88F0FCC}
+		{871A8CD2-F63E-464E-B89A-03BC20EE8B7E} = {51A00075-62C7-4E8D-A048-3D25B38C09BB}
 	EndGlobalSection
 EndGlobal
