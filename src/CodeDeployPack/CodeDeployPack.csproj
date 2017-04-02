@@ -48,11 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CreateCodeDeployPackage.cs" />
+    <Compile Include="CreateCodeDeployTaskParameters.cs" />
     <Compile Include="GetAssemblyVersionInfo.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="PackageCompilation\AppPackagerBase.cs" />
     <Compile Include="PackageCompilation\ExecutableAppPackager.cs" />
+    <Compile Include="PackageCompilation\SpecialFileTypes\AppConfigMapper.cs" />
+    <Compile Include="PackageCompilation\SpecialFileTypes\IMapFiles.cs" />
+    <Compile Include="PackageCompilation\SpecialFileTypes\TypeScriptMapper.cs" />
     <Compile Include="PackageCompilation\WebApplicationPackager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

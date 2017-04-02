@@ -22,15 +22,11 @@
     <CodeDeployPackAppendToPackageId Condition="'$(CodeDeployPackAppendToPackageId)' == ''"></CodeDeployPackAppendToPackageId>
     <CodeDeployPackAppendToVersion Condition="'$(CodeDeployPackAppendToVersion)' == ''"></CodeDeployPackAppendToVersion>
     <CodeDeployPackReleaseNotesFile Condition="'$(CodeDeployPackReleaseNotesFile)' == ''"></CodeDeployPackReleaseNotesFile>
-    <CodeDeployPackNuGetExePath Condition="'$(CodeDeployPackNuGetExePath)' == ''"></CodeDeployPackNuGetExePath>
     <CodeDeployPackPublishPackageToFileShare Condition="'$(CodeDeployPackPublishPackageToFileShare)' == ''"></CodeDeployPackPublishPackageToFileShare>
     <CodeDeployPackPublishPackageToHttp Condition="'$(CodeDeployPackPublishPackageToHttp)' == ''"></CodeDeployPackPublishPackageToHttp>
     <CodeDeployPackPublishApiKey Condition="'$(CodeDeployPackPublishApiKey)' == ''"></CodeDeployPackPublishApiKey>
     <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''"></CodeDeployPackPackageVersion>
-    <CodeDeployPackNuGetArguments Condition="'$(CodeDeployPackNuGetArguments)' == ''"></CodeDeployPackNuGetArguments>
-    <CodeDeployPackNugetProperties Condition="'$(CodeDeployPackNuGetProperties)' == ''"></CodeDeployPackNugetProperties>
     <CodeDeployPackEnforceAddingFiles Condition="'$(CodeDeployPackEnforceAddingFiles)' == ''">false</CodeDeployPackEnforceAddingFiles>
-    <CodeDeployPackNuGetPushProperties Condition="'$(CodeDeployPackNuGetPushProperties)' == ''"></CodeDeployPackNuGetPushProperties>
     <CodeDeployPackPublishPackagesToTeamCity Condition="'$(CodeDeployPackPublishPackagesToTeamCity)' == ''">true</CodeDeployPackPublishPackagesToTeamCity>
     <CodeDeployPackProjectName Condition="'$(CodeDeployPackProjectName)' == ''">$(MSBuildProjectName)</CodeDeployPackProjectName>
     <CodeDeployPackIgnoreNonRootScripts Condition="'$(CodeDeployPackIgnoreNonRootScripts)' == ''">false</CodeDeployPackIgnoreNonRootScripts>
@@ -65,7 +61,6 @@
     </ItemGroup>
     
     <CreateCodeDeployPackage
-      NuSpecFileName="$(CodeDeployPackNuSpecFileName)"
       AppendToPackageId="$(CodeDeployPackAppendToPackageId)"
       AppendToVersion="$(CodeDeployPackAppendToVersion)"
       ContentFiles="@(CodeDeployPackContentFiles)"
@@ -75,9 +70,6 @@
       PackageVersion="$(CodeDeployPackPackageVersion)"
       PrimaryOutputAssembly="$(TargetPath)"
       ReleaseNotesFile="$(CodeDeployPackReleaseNotesFile)"
-      NuGetExePath="$(CodeDeployPackNuGetExePath)"
-      NuGetArguments="$(CodeDeployPackNuGetArguments)"
-      NuGetProperties="$(CodeDeployPackNuGetProperties)"
       EnforceAddingFiles="$(CodeDeployPackEnforceAddingFiles)"
       PublishPackagesToTeamCity="$(CodeDeployPackPublishPackagesToTeamCity)"
       WrittenFiles="@(CodeDeployPackWrittenFiles)"
@@ -86,10 +78,8 @@
       AppConfigFile="$(CodeDeployPackAppConfigFileOverride)"
       >
       <Output TaskParameter="Packages" ItemName="CodeDeployPackBuiltPackages" />
-      <Output TaskParameter="NuGetExePath" PropertyName="CodeDeployPackNuGetExePath" />
     </CreateCodeDeployPackage>
 
     <Message Text="Built package: @(CodeDeployPackBuiltPackages)" Importance="Low" />
-    <Message Text="NuGet.exe: $(CodeDeployPackNuGetExePath)" Importance="Low" />
  </Target>
 </Project>
