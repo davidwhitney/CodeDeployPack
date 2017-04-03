@@ -50,5 +50,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\CodeDeployPack\CodeDeployPack.csproj">
+      <Project>{8565BA53-4EA2-49C9-AEB2-535F2C65A527}</Project>
+      <Name>CodeDeployPack</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
