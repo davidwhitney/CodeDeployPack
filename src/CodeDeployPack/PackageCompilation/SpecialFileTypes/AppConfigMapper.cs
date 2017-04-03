@@ -10,10 +10,10 @@ namespace CodeDeployPack.PackageCompilation.SpecialFileTypes
 {
     public class AppConfigMapper : IMapFiles
     {
-        public bool IsApplicable(ITaskItem sourceFile, string sourceFilePath, string destinationPath) => 
+        public bool IsApplicable(string sourceFilePath, string destinationPath) => 
             string.Equals(Path.GetFileName(destinationPath), "app.config", StringComparison.OrdinalIgnoreCase);
 
-        public void Process(Dictionary<string, string> indexedFiles, ITaskItem sourceFile, string destinationPath)
+        public void Process(Dictionary<string, string> indexedFiles, ITaskItem sourceFile, string sourceFilePath, string destinationPath)
         {
             //var fileName = Path.GetFileName(destinationPath);
             //if (string.Equals(fileName, "app.config", StringComparison.OrdinalIgnoreCase))

@@ -54,6 +54,7 @@
     <Compile Include="GetAssemblyVersionInfo.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="PackageCompilation\PackageCommand.cs" />
     <Compile Include="PackageCompilation\AppPackagerBase.cs" />
     <Compile Include="PackageCompilation\ExecutableAppPackager.cs" />
     <Compile Include="PackageCompilation\SpecialFileTypes\AppConfigMapper.cs" />

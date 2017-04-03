@@ -5,7 +5,7 @@ namespace CodeDeployPack.PackageCompilation.SpecialFileTypes
 {
     public interface IMapFiles
     {
-        bool IsApplicable(ITaskItem sourceFile, string sourceFilePath, string destinationPath);
-        void Process(Dictionary<string, string> fileMap, ITaskItem sourceFile, string destinationPath);
+        bool IsApplicable(string sourceFilePath, string destinationPath);
+        void Process(Dictionary<string, string> fileMap, ITaskItem sourceFile, string sourceFilePath, string destinationPath);
     }
 }
