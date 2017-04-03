@@ -45,7 +45,7 @@ namespace CodeDeployPack.PackageCompilation
                     continue;
                 }
 
-                if (IndexedFiles.Keys.Any(k => k.ToLower() == sourceFilePath))
+                if (IndexedFiles.Keys.Any(k => k.ToLower() == sourceFilePath.ToLower()))
                 {
                     continue;
                 }
