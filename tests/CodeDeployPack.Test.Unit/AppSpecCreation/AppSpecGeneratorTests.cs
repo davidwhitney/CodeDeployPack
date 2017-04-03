@@ -17,10 +17,7 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
         public void A()
         {
             var asg = new AppSpecGenerator(null);
-            var packageContents = new Dictionary<string, string>
-            {
-                {"c:\\src.txt", "c:\\dest.txt"}
-            };
+            var packageContents = new Dictionary<string, string>();
 
             var spec = asg.CreateAppSpec(packageContents);
 
