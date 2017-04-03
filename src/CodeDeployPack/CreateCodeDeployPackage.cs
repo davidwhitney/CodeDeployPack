@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using CodeDeployPack.Logging;
@@ -48,12 +49,16 @@ namespace CodeDeployPack
             var packager = packagers.First(x => x.IsApplicable(ContentFiles));
             packager.Package(this, ContentFiles, binaries, ProjectDirectory, OutDir);
 
-            var filesToMap = packager.IndexedFiles;
+            StageFiles(packager);
+            ZipFile.CreateFromDirectory(packing, Path.Combine(packed, "CodeDeploy.zip"));
 
-            foreach (var file in filesToMap)
+            return true;
+        }
+
+        private void StageFiles(AppPackagerBase packager)
+        {
+            foreach (var file in packager.IndexedFiles)
             {
-                _log.LogMessage($"{file.Key} => {file.Value}");
-
                 var packingDirectory = Path.Combine(ProjectDirectory, "obj", "packing");
                 var target = Path.Combine(packingDirectory, file.Value);
                 EnsureTargetDirectoryExists(target);
@@ -61,8 +66,6 @@ namespace CodeDeployPack
                 _log.LogMessage($"Copying '{file.Key}' => '{target}'");
                 _fileSystem.File.Copy(file.Key, target, true);
             }
-
-            return true;
         }
 
         private void EnsureTargetDirectoryExists(string target)
@@ -85,14 +88,14 @@ namespace CodeDeployPack
         {
             _log.LogMessage($"CodeDeployPack version: {Assembly.GetExecutingAssembly().GetName().Version}");
             _log.LogMessage("---Arguments---", MessageImportance.Low);
-            _log.LogMessage("Content files: " + (ContentFiles ?? new ITaskItem[0]).Length, MessageImportance.High);
-            _log.LogMessage("ProjectDirectory: " + ProjectDirectory, MessageImportance.High);
-            _log.LogMessage("OutDir: " + OutDir, MessageImportance.High);
-            _log.LogMessage("PackageVersion: " + PackageVersion, MessageImportance.High);
-            _log.LogMessage("ProjectName: " + ProjectName, MessageImportance.High);
-            _log.LogMessage("PrimaryOutputAssembly: " + PrimaryOutputAssembly, MessageImportance.High);
-            _log.LogMessage("AppConfigFile: " + AppConfigFile, MessageImportance.High);
-            _log.LogMessage("---------------", MessageImportance.High);
+            _log.LogMessage("Content files: " + (ContentFiles ?? new ITaskItem[0]).Length);
+            _log.LogMessage("ProjectDirectory: " + ProjectDirectory);
+            _log.LogMessage("OutDir: " + OutDir);
+            _log.LogMessage("PackageVersion: " + PackageVersion);
+            _log.LogMessage("ProjectName: " + ProjectName);
+            _log.LogMessage("PrimaryOutputAssembly: " + PrimaryOutputAssembly);
+            _log.LogMessage("AppConfigFile: " + AppConfigFile);
+            _log.LogMessage("---------------");
         }
 
         private string CreateEmptyOutputDirectory(string name)
