@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Abstractions;
 using System.IO.Compression;
 using System.Linq;
+using CodeDeployPack.AppSpecCreation;
 using CodeDeployPack.Logging;
 using Microsoft.Build.Framework;
 
@@ -13,12 +14,14 @@ namespace CodeDeployPack.PackageCompilation
         private readonly ILog _log;
         private readonly IFileSystem _fileSystem;
         private readonly CreateCodeDeployTaskParameters _parameters;
+        private readonly IAppSpecGenerator _appSpecGenerator;
 
-        public PackageCommand(ILog log, IFileSystem fileSystem, CreateCodeDeployTaskParameters parameters)
+        public PackageCommand(ILog log, IFileSystem fileSystem, CreateCodeDeployTaskParameters parameters, IAppSpecGenerator appSpecGenerator)
         {
             _log = log;
             _fileSystem = fileSystem;
             _parameters = parameters;
+            _appSpecGenerator = appSpecGenerator;
         }
 
         public void Execute()
@@ -38,16 +41,19 @@ namespace CodeDeployPack.PackageCompilation
             var packager = packagers.First(x => x.IsApplicable(_parameters.ContentFiles));
             packager.Package(_parameters, _parameters.ContentFiles, binaries, _parameters.ProjectDirectory, _parameters.OutDir);
 
-            StageFiles(packager);
+            var packingDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing");
+            var specFile = _appSpecGenerator.CreateAppSpec(packager.IndexedFiles);
+            _fileSystem.File.WriteAllText(Path.Combine(packingDirectory, "appspec.yml"), specFile);
+
+            StageFiles(packingDirectory, packager);
             ZipFile.CreateFromDirectory(packing, Path.Combine(packed, "CodeDeploy.zip"));
         }
         
-        private void StageFiles(AppPackagerBase packager)
+        private void StageFiles(string destination, AppPackagerBase packager)
         {
             foreach (var file in packager.IndexedFiles)
             {
-                var packingDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing");
-                var target = Path.Combine(packingDirectory, file.Value);
+                var target = Path.Combine(destination, file.Value);
                 EnsureTargetDirectoryExists(target);
 
                 _log.LogMessage($"Copying '{file.Key}' => '{target}'");

@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using System.Reflection;
+using CodeDeployPack.AppSpecCreation;
 using CodeDeployPack.Logging;
 using CodeDeployPack.PackageCompilation;
 using Microsoft.Build.Framework;
@@ -37,7 +38,9 @@ namespace CodeDeployPack
             WrittenFiles = WrittenFiles ?? new ITaskItem[0];
             _log.LogMessage("Written files: " + WrittenFiles.Length);
 
-            new PackageCommand(_log, _fileSystem, this).Execute();
+            var appSpecGenerator = new AppSpecGenerator(new DiscoverVersions());
+            new PackageCommand(_log, _fileSystem, this, appSpecGenerator).Execute();
+
             return true;
         }
 
