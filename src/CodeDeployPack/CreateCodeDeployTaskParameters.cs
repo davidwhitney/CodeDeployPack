@@ -5,21 +5,6 @@ namespace CodeDeployPack
     public class CreateCodeDeployTaskParameters
     {
         /// <summary>
-        /// Allows the name of the NuSpec file to be overridden. If empty, defaults to <see cref="ProjectName"/>.nuspec.
-        /// </summary>
-        public string NuSpecFileName { get; set; }
-
-        /// <summary>
-        /// Appends the value to <see cref="ProjectName"/> when generating the Id of the Nuget Package
-        /// </summary>
-        public string AppendToPackageId { get; set; }
-
-        /// <summary>
-        /// Appends the value to the version.
-        /// </summary>
-        public string AppendToVersion { get; set; }
-
-        /// <summary>
         /// The list of content files in the project. For web applications, these files will be included in the final package.
         /// </summary>
         [Required]
@@ -54,7 +39,7 @@ namespace CodeDeployPack
         public string PackageVersion { get; set; }
 
         /// <summary>
-        /// The name of the project; by default will be set to $(MSBuildProjectName). 
+        /// The name of the project; by default will be set to $(MSBuildProjectName).
         /// </summary>
         [Required]
         public string ProjectName { get; set; }
@@ -65,11 +50,6 @@ namespace CodeDeployPack
         [Required]
         public string PrimaryOutputAssembly { get; set; }
 
-        /// <summary>
-        /// Allows release notes to be attached to the NuSpec file when building.
-        /// </summary>
-        public string ReleaseNotesFile { get; set; }
-
         public string AppConfigFile { get; set; }
 
         /// <summary>
@@ -78,13 +58,6 @@ namespace CodeDeployPack
         [Output]
         public ITaskItem[] Packages { get; set; }
 
-        public bool EnforceAddingFiles { get; set; }
-
         public bool PublishPackagesToTeamCity { get; set; }
-        
-        /// <summary>
-        /// Whether to suppress the warning about having scripts at the root
-        /// </summary>
-        public bool IgnoreNonRootScripts { get; set; }
     }
 }

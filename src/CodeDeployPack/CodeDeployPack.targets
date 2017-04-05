@@ -18,18 +18,12 @@
 
     <RunCodeDeployPack Condition="'$(RunCodeDeployPack)'==''">true</RunCodeDeployPack>
     <CodeDeployPackIncludeTypeScriptSourceFiles Condition="'$(CodeDeployPackIncludeTypeScriptSourceFiles)'==''">false</CodeDeployPackIncludeTypeScriptSourceFiles>
-    <CodeDeployPackNuSpecFileName Condition="'$(CodeDeployPackNuSpecFileName)' == ''"></CodeDeployPackNuSpecFileName>
-    <CodeDeployPackAppendToPackageId Condition="'$(CodeDeployPackAppendToPackageId)' == ''"></CodeDeployPackAppendToPackageId>
-    <CodeDeployPackAppendToVersion Condition="'$(CodeDeployPackAppendToVersion)' == ''"></CodeDeployPackAppendToVersion>
-    <CodeDeployPackReleaseNotesFile Condition="'$(CodeDeployPackReleaseNotesFile)' == ''"></CodeDeployPackReleaseNotesFile>
     <CodeDeployPackPublishPackageToFileShare Condition="'$(CodeDeployPackPublishPackageToFileShare)' == ''"></CodeDeployPackPublishPackageToFileShare>
     <CodeDeployPackPublishPackageToHttp Condition="'$(CodeDeployPackPublishPackageToHttp)' == ''"></CodeDeployPackPublishPackageToHttp>
     <CodeDeployPackPublishApiKey Condition="'$(CodeDeployPackPublishApiKey)' == ''"></CodeDeployPackPublishApiKey>
     <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''"></CodeDeployPackPackageVersion>
-    <CodeDeployPackEnforceAddingFiles Condition="'$(CodeDeployPackEnforceAddingFiles)' == ''">false</CodeDeployPackEnforceAddingFiles>
     <CodeDeployPackPublishPackagesToTeamCity Condition="'$(CodeDeployPackPublishPackagesToTeamCity)' == ''">true</CodeDeployPackPublishPackagesToTeamCity>
     <CodeDeployPackProjectName Condition="'$(CodeDeployPackProjectName)' == ''">$(MSBuildProjectName)</CodeDeployPackProjectName>
-    <CodeDeployPackIgnoreNonRootScripts Condition="'$(CodeDeployPackIgnoreNonRootScripts)' == ''">false</CodeDeployPackIgnoreNonRootScripts>
     <CodeDeployPackAppConfigFileOverride Condition="'$(CodeDeployPackAppConfigFileOverride)' == ''">$(TargetDir)$(TargetFileName).config</CodeDeployPackAppConfigFileOverride>
     <CodeDeployPackAppendProjectToFeed Condition="'$(CodeDeployPackAppendProjectToFeed)' == ''">false</CodeDeployPackAppendProjectToFeed>
     <CodeDeployPackUseFileVersion Condition="'$(CodeDeployPackUseFileVersion)' == ''">false</CodeDeployPackUseFileVersion>
@@ -61,20 +55,15 @@
     </ItemGroup>
     
     <CreateCodeDeployPackage
-      AppendToPackageId="$(CodeDeployPackAppendToPackageId)"
-      AppendToVersion="$(CodeDeployPackAppendToVersion)"
       ContentFiles="@(CodeDeployPackContentFiles)"
       OutDir="$(OutDir)"
       ProjectDirectory="$(MSBuildProjectDirectory)"
       ProjectName="$(CodeDeployPackProjectName)"
       PackageVersion="$(CodeDeployPackPackageVersion)"
       PrimaryOutputAssembly="$(TargetPath)"
-      ReleaseNotesFile="$(CodeDeployPackReleaseNotesFile)"
-      EnforceAddingFiles="$(CodeDeployPackEnforceAddingFiles)"
       PublishPackagesToTeamCity="$(CodeDeployPackPublishPackagesToTeamCity)"
       WrittenFiles="@(CodeDeployPackWrittenFiles)"
       IncludeTypeScriptSourceFiles="$(CodeDeployPackIncludeTypeScriptSourceFiles)"
-      IgnoreNonRootScripts="$(CodeDeployPackIgnoreNonRootScripts)"
       AppConfigFile="$(CodeDeployPackAppConfigFileOverride)"
       >
       <Output TaskParameter="Packages" ItemName="CodeDeployPackBuiltPackages" />

@@ -19,10 +19,10 @@ namespace CodeDeployPack.PackageCompilation
         public override void Package(CreateCodeDeployTaskParameters parameters, ITaskItem[] contentFiles, List<ITaskItem> binaries, string projectDirectory, string outDir)
         {
             Log.LogMessage("Packaging an ASP.NET web application (Web.config detected)");
-            
+
             var content = contentFiles.Where(file => !string.Equals(Path.GetFileName(file.ItemSpec),
                 "packages.config", StringComparison.OrdinalIgnoreCase));
-            
+
             Log.LogMessage("Add content files", MessageImportance.Normal);
             IndexFilesToPackage(parameters, content, projectDirectory);
 

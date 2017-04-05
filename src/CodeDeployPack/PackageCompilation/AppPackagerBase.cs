@@ -14,7 +14,7 @@ namespace CodeDeployPack.PackageCompilation
         protected readonly ILog Log;
         private readonly IFileSystem _fs;
         public Dictionary<string, string> IndexedFiles { get; set; } = new Dictionary<string, string>();
-        
+
         protected AppPackagerBase(ILog log, IFileSystem fs)
         {
             Log = log;
