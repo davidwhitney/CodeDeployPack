@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using System.IO.Compression;
 using System.Linq;
 using CodeDeployPack.AppSpecCreation;
 using CodeDeployPack.Logging;
@@ -17,11 +16,8 @@ namespace CodeDeployPack.PackageCompilation
         private readonly IAppSpecGenerator _appSpecGenerator;
         private readonly IZipFile _zipFile;
 
-        public PackageCommand(ILog log, 
-            IFileSystem fileSystem, 
-            CreateCodeDeployTaskParameters parameters, 
-            IAppSpecGenerator appSpecGenerator,
-            IZipFile zipFile)
+        public PackageCommand(ILog log, IFileSystem fileSystem, CreateCodeDeployTaskParameters parameters,
+                              IAppSpecGenerator appSpecGenerator, IZipFile zipFile)
         {
             _log = log;
             _fileSystem = fileSystem;
@@ -30,7 +26,7 @@ namespace CodeDeployPack.PackageCompilation
             _zipFile = zipFile;
         }
 
-        public void Execute()
+        public string Execute()
         {
             var packing = CreateEmptyOutputDirectory("packing");
             var packed = CreateEmptyOutputDirectory("packed");
@@ -52,7 +48,11 @@ namespace CodeDeployPack.PackageCompilation
             _fileSystem.File.WriteAllText(Path.Combine(packingDirectory, "appspec.yml"), specFile);
 
             StageFiles(packingDirectory, packager);
-            _zipFile.CreateFromDirectory(packing, Path.Combine(packed, "CodeDeploy.zip"));
+
+            var zipTargetPath = Path.Combine(packed, "CodeDeploy.zip");
+            _zipFile.CreateFromDirectory(packing, zipTargetPath);
+
+            return zipTargetPath;
         }
 
         private void StageFiles(string destination, AppPackagerBase packager)

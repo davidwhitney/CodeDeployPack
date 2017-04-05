@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using CodeDeployPack.Logging;
 using Microsoft.Build.Framework;
 
-namespace CodeDeployPack.Test.Unit
+namespace CodeDeployPack.Test.Unit.TestDoubles
 {
     public class FakeLogger : List<string>, ILog
     {

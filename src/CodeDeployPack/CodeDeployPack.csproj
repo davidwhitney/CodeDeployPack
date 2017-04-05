@@ -59,6 +59,7 @@
     <Compile Include="GetAssemblyVersionInfo.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="PackageCompilation\PackageCommandFactory.cs" />
     <Compile Include="PackageCompilation\IZipFile.cs" />
     <Compile Include="PackageCompilation\PackageCommand.cs" />
     <Compile Include="PackageCompilation\AppPackagerBase.cs" />

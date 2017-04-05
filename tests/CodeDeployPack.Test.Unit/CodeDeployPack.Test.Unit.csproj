@@ -54,11 +54,12 @@
   <ItemGroup>
     <Compile Include="AppSpecCreation\AppSpecGeneratorTests.cs" />
     <Compile Include="CreateCodeDeployPackageTests.cs" />
-    <Compile Include="FakeLogger.cs" />
-    <Compile Include="FakeSpecGenerator.cs" />
-    <Compile Include="FakeZipFileWrapper.cs" />
+    <Compile Include="TestDoubles\FakeLogger.cs" />
+    <Compile Include="TestDoubles\FakeSpecGenerator.cs" />
+    <Compile Include="TestDoubles\FakeZipFileWrapper.cs" />
     <Compile Include="PackageCommandTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDoubles\TaskItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

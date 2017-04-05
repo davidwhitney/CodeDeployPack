@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using CodeDeployPack.AppSpecCreation;
 
-namespace CodeDeployPack.Test.Unit
+namespace CodeDeployPack.Test.Unit.TestDoubles
 {
     public class FakeSpecGenerator : IAppSpecGenerator
     {
