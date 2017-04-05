@@ -19,9 +19,21 @@ namespace CodeDeployPack.AppSpecCreation
 
         public string CreateAppSpec(Dictionary<string, string> packageContents)
         {
-            var appSpec = new AppSpec();
+            var packageId = "";
 
-            return new Serializer().Serialize(appSpec);
+            var appSpec = new AppSpec
+            {
+                files = new List<FileEntry>
+                {
+                    new FileEntry
+                    {
+                        source = "app",
+                        destination = $"c:\\CodeDeploy\\{packageId}"
+                    }
+                }
+            };
+
+            return new SerializerBuilder().EmitDefaults().Build().Serialize(appSpec);
         }
     }
 

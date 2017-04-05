@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using YamlDotNet.RepresentationModel;
 
 namespace CodeDeployPack.AppSpecCreation
 {
     public class AppSpec
     {
-        public string version { get; set; }
+        public string version { get; set; } = "0.0.0.0";
         public Os os { get; set; } = Os.windows;
 
         public List<FileEntry> files { get; set; } = new List<FileEntry>();
