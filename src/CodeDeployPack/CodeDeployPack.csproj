@@ -59,6 +59,7 @@
     <Compile Include="GetAssemblyVersionInfo.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\Logger.cs" />
+    <Compile Include="PackageCompilation\IZipFile.cs" />
     <Compile Include="PackageCompilation\PackageCommand.cs" />
     <Compile Include="PackageCompilation\AppPackagerBase.cs" />
     <Compile Include="PackageCompilation\ExecutableAppPackager.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="PackageCompilation\SpecialFileTypes\IMapFiles.cs" />
     <Compile Include="PackageCompilation\SpecialFileTypes\TypeScriptMapper.cs" />
     <Compile Include="PackageCompilation\WebApplicationPackager.cs" />
+    <Compile Include="PackageCompilation\ZipFileWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

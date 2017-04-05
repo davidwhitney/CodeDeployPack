@@ -15,20 +15,26 @@ namespace CodeDeployPack.PackageCompilation
         private readonly IFileSystem _fileSystem;
         private readonly CreateCodeDeployTaskParameters _parameters;
         private readonly IAppSpecGenerator _appSpecGenerator;
+        private readonly IZipFile _zipFile;
 
-        public PackageCommand(ILog log, IFileSystem fileSystem, CreateCodeDeployTaskParameters parameters, IAppSpecGenerator appSpecGenerator)
+        public PackageCommand(ILog log, 
+            IFileSystem fileSystem, 
+            CreateCodeDeployTaskParameters parameters, 
+            IAppSpecGenerator appSpecGenerator,
+            IZipFile zipFile)
         {
             _log = log;
             _fileSystem = fileSystem;
             _parameters = parameters;
             _appSpecGenerator = appSpecGenerator;
+            _zipFile = zipFile;
         }
 
         public void Execute()
         {
             var packing = CreateEmptyOutputDirectory("packing");
             var packed = CreateEmptyOutputDirectory("packed");
-                
+
             var writtenFiles = _parameters.WrittenFiles ?? new ITaskItem[0];
             var binaries = new List<ITaskItem>(writtenFiles);
 
@@ -46,9 +52,9 @@ namespace CodeDeployPack.PackageCompilation
             _fileSystem.File.WriteAllText(Path.Combine(packingDirectory, "appspec.yml"), specFile);
 
             StageFiles(packingDirectory, packager);
-            ZipFile.CreateFromDirectory(packing, Path.Combine(packed, "CodeDeploy.zip"));
+            _zipFile.CreateFromDirectory(packing, Path.Combine(packed, "CodeDeploy.zip"));
         }
-        
+
         private void StageFiles(string destination, AppPackagerBase packager)
         {
             foreach (var file in packager.IndexedFiles)

@@ -39,7 +39,7 @@ namespace CodeDeployPack
             _log.LogMessage("Written files: " + WrittenFiles.Length);
 
             var appSpecGenerator = new AppSpecGenerator(new DiscoverVersions());
-            new PackageCommand(_log, _fileSystem, this, appSpecGenerator).Execute();
+            new PackageCommand(_log, _fileSystem, this, appSpecGenerator, new ZipFileWrapper()).Execute();
 
             return true;
         }
