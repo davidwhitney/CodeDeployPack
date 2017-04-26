@@ -30,6 +30,10 @@ namespace CodeDeployPack.PackageCompilation
         {
             var packing = CreateEmptyOutputDirectory("packing");
             var packed = CreateEmptyOutputDirectory("packed");
+            CreateEmptyOutputDirectory("packing\\app");
+
+            var packingDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing");
+            var appRootDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing", "app");
 
             var writtenFiles = _parameters.WrittenFiles ?? new ITaskItem[0];
             var binaries = new List<ITaskItem>(writtenFiles);
@@ -43,11 +47,10 @@ namespace CodeDeployPack.PackageCompilation
             var packager = packagers.First(x => x.IsApplicable(_parameters.ContentFiles));
             packager.Package(_parameters, _parameters.ContentFiles, binaries, _parameters.ProjectDirectory, _parameters.OutDir);
 
-            var packingDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing");
             var specFile = _appSpecGenerator.CreateAppSpec(packager.IndexedFiles);
             _fileSystem.File.WriteAllText(Path.Combine(packingDirectory, "appspec.yml"), specFile);
 
-            StageFiles(packingDirectory, packager);
+            StageFiles(appRootDirectory, packager);
 
             var zipTargetPath = Path.Combine(packed, "CodeDeploy.zip");
             _zipFile.CreateFromDirectory(packing, zipTargetPath);

@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions.TestingHelpers;
+﻿using System.Collections.Generic;
+using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using CodeDeployPack.PackageCompilation;
 using CodeDeployPack.Test.Unit.TestDoubles;
@@ -20,25 +21,9 @@ namespace CodeDeployPack.Test.Unit
         public void SetUp()
         {
             _logger = new FakeLogger();
-            _fs = new MockFileSystem();
-            _fs.AddFile("c:\\abc\\file.txt", "");
-            _fs.AddFile("c:\\abc\\bin\\CodeDeployPack.SampleWebApp.dll", "");
-            _fs.AddFile("c:\\abc\\bin\\CodeDeployPack.SampleWebApp.pdb", "");
-            _fs.AddDirectory("c:\\abc\\obj");
-            _fs.AddDirectory("c:\\abc\\bin");
 
+            WebAppInFileSystem();
             _fakeZipFileWrapper = new FakeZipFileWrapper(_fs);
-            _paramz = new CreateCodeDeployTaskParameters
-            {
-                ProjectDirectory = "c:\\abc",
-                WrittenFiles = new ITaskItem[]
-                {
-                    new TaskItem {ItemSpec = "file.txt"},
-                    new TaskItem {ItemSpec = "bin\\CodeDeployPack.SampleWebApp.dll"},
-                    new TaskItem {ItemSpec = "bin\\CodeDeployPack.SampleWebApp.pdb"}
-                }
-            };
-
             _cmd = new PackageCommand(_logger, _fs, _paramz, new FakeSpecGenerator(), _fakeZipFileWrapper);
         }
 
@@ -47,8 +32,8 @@ namespace CodeDeployPack.Test.Unit
         {
             _cmd.Execute();
 
-            Assert.That(_fs.AllDirectories.Contains("c:\\abc\\obj\\packing\\"));
-            Assert.That(_fs.AllDirectories.Contains("c:\\abc\\obj\\packed\\"));
+            Assert.That(_fs.AllDirectories.Contains("c:\\WebApp\\obj\\packing\\"));
+            Assert.That(_fs.AllDirectories.Contains("c:\\WebApp\\obj\\packed\\"));
         }
 
         [Test]
@@ -64,7 +49,7 @@ namespace CodeDeployPack.Test.Unit
         {
             var zipFilePath = _cmd.Execute();
 
-            Assert.That(zipFilePath, Is.EqualTo("c:\\abc\\obj\\packed\\CodeDeploy.zip"));
+            Assert.That(zipFilePath, Is.EqualTo("c:\\WebApp\\obj\\packed\\CodeDeploy.zip"));
         }
 
         [Test]
@@ -76,12 +61,39 @@ namespace CodeDeployPack.Test.Unit
         }
 
         [Test]
-        public void Execute_AnyFilesProducedByBuildExistInZip()
+        public void Execute_AnyFilesProducedByBuildExistInZipInAppFolder()
         {
             _cmd.Execute();
 
-            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip, Does.Contain("file.txt"));
-            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip.Count, Is.EqualTo(4));
+            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip, Does.Contain("app\\HtmlPage1.html"));
+            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip, Does.Contain("app\\web.config"));
+            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip, Does.Contain("app\\bin\\WebApp.dll"));
+            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip, Does.Contain("app\\bin\\WebApp.pdb"));
+            Assert.That(_fakeZipFileWrapper.FilesThatWouldHaveBeenInTheZip.Count, Is.EqualTo(5));
+        }
+
+        private void WebAppInFileSystem()
+        {
+            _fs = new MockFileSystem(new Dictionary<string, MockFileData>(), "c:\\WebApp");
+            _fs.AddFile("c:\\WebApp\\HtmlPage1.html", "");
+            _fs.AddFile("c:\\WebApp\\web.config", "");
+            _fs.AddFile("c:\\WebApp\\bin\\WebApp.dll", "");
+            _fs.AddFile("c:\\WebApp\\bin\\WebApp.pdb", "");
+
+            _paramz = new CreateCodeDeployTaskParameters
+            {
+                ProjectDirectory = "c:\\WebApp",
+                ContentFiles = new ITaskItem[]
+                {
+                    new TaskItem {ItemSpec = "HtmlPage1.html"},
+                    new TaskItem {ItemSpec = "web.config"}
+                },
+                WrittenFiles = new ITaskItem[]
+                {
+                    new TaskItem {ItemSpec = "bin\\WebApp.dll"},
+                    new TaskItem {ItemSpec = "bin\\WebApp.pdb"}
+                }
+            };
         }
     }
 }

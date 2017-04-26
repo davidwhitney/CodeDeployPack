@@ -6,7 +6,7 @@ namespace CodeDeployPack.Test.Unit.TestDoubles
 {
     public class TaskItem : ITaskItem
     {
-        public string GetMetadata(string metadataName) => null;
+        public string GetMetadata(string metadataName) => metadataName == "Link" ? Link : null;
         public void SetMetadata(string metadataName, string metadataValue) => throw new NotImplementedException();
         public void RemoveMetadata(string metadataName) => throw new NotImplementedException();
         public void CopyMetadataTo(ITaskItem destinationItem) => throw new NotImplementedException();
@@ -14,5 +14,6 @@ namespace CodeDeployPack.Test.Unit.TestDoubles
         public string ItemSpec { get; set; }
         public ICollection MetadataNames { get; }
         public int MetadataCount { get; }
+        public string Link { get; set; }
     }
 }

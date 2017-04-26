@@ -28,6 +28,18 @@ namespace CodeDeployPack
             WrittenFiles = WrittenFiles ?? new ITaskItem[0];
             log.LogMessage("Written files: " + WrittenFiles.Length);
 
+            log.LogMessage("Written files:");
+            foreach (var file in WrittenFiles)
+            {
+                log.LogMessage($"ItemSpec: {file.ItemSpec}, {file.GetMetadata("Link")}");
+            }
+
+            log.LogMessage("Content files:");
+            foreach (var file in ContentFiles ?? new ITaskItem[0])
+            {
+                log.LogMessage($"ItemSpec: {file.ItemSpec}, {file.GetMetadata("Link")}");
+            }
+
             PackageCommandFactory.Manufacture(log, this).Execute();
             return true;
         }

@@ -13,8 +13,8 @@ namespace CodeDeployPack.PackageCompilation
         private readonly IFileSystem _fs;
         public WebApplicationPackager(ILog log, IFileSystem fs) : base(log, fs) => _fs = fs;
 
-        public override bool IsApplicable(ITaskItem[] contentFiles)
-            => _fs.File.Exists("web.config") || contentFiles != null && HasLinkedWebConfigFile(contentFiles);
+        public override bool IsApplicable(ITaskItem[] contentFiles) =>
+            _fs.File.Exists("web.config") || contentFiles != null && HasLinkedWebConfigFile(contentFiles);
 
         public override void Package(CreateCodeDeployTaskParameters parameters, ITaskItem[] contentFiles, List<ITaskItem> binaries, string projectDirectory, string outDir)
         {
