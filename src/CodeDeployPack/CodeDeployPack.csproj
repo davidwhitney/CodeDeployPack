@@ -69,6 +69,8 @@
     <Compile Include="PackageCompilation\PackageCommand.cs" />
     <Compile Include="PackageCompilation\AppPackagerBase.cs" />
     <Compile Include="PackageCompilation\ExecutableAppPackager.cs" />
+    <Compile Include="PackageCompilation\PackingEnvironmentVariables.cs" />
+    <Compile Include="PackageCompilation\PackingEnvironmentVariablesFactory.cs" />
     <Compile Include="PackageCompilation\SpecialFileTypes\AppConfigMapper.cs" />
     <Compile Include="PackageCompilation\SpecialFileTypes\IMapFiles.cs" />
     <Compile Include="PackageCompilation\SpecialFileTypes\TypeScriptMapper.cs" />

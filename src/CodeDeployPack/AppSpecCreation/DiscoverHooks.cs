@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CodeDeployPack.PackageCompilation;
 
 namespace CodeDeployPack.AppSpecCreation
 {
     public class DiscoverHooks : IDiscoverHooks
     {
+        private readonly PackingEnvironmentVariables _envVariables;
         private const string ScriptsDirectoryConvention = ".deploy";
 
         private readonly List<(string fileNameWithoutExt, Func<Hooks, List<Hook>> collectionProvider)> _mappers =
@@ -19,16 +21,21 @@ namespace CodeDeployPack.AppSpecCreation
                 ("validate-service", x => x.ValidateService)
             };
 
-        private static void AddHook(List<Hook> list, string path)
+        public DiscoverHooks(PackingEnvironmentVariables envVariables)
+        {
+            _envVariables = envVariables;
+        }
+
+        private void AddHook(List<Hook> list, string path)
         {
             if (list.Any())
                 throw new InvalidOperationException($"Unable to add hook '{path}'. The hook of the same type '{list.First().location}' is already present.");
             list.Add(ToHook(path));
         }
 
-        private static Hook ToHook(string path)
+        private Hook ToHook(string path)
         {
-            return new Hook { location = path, timeout = 180};
+            return new Hook { location = _envVariables.LocationOfAppInArchive + "\\" + path, timeout = 180};
         }
 
         public Hooks Discover(IEnumerable<string> destinationPaths)
@@ -55,7 +62,7 @@ namespace CodeDeployPack.AppSpecCreation
                 AddHook(targetCollection, destinationPath);
         }
 
-        private bool DoesFileNameMatch(string expectedFileNameWithoutExtension, string destinationPath)
+        private static bool DoesFileNameMatch(string expectedFileNameWithoutExtension, string destinationPath)
         {
             return string.Equals(
                 Path.GetFileNameWithoutExtension(destinationPath),

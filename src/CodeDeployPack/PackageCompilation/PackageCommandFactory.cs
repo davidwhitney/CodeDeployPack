@@ -9,11 +9,15 @@ namespace CodeDeployPack.PackageCompilation
         public static PackageCommand Manufacture(ILog log, CreateCodeDeployTaskParameters parameters)
         {
             var fileSystem = new FileSystem();
+            var envFactory = new PackingEnvironmentVariablesFactory(log, parameters, fileSystem);
+
+            var envVariables = envFactory.GetConfig();
+
             var versionDiscovery = new DiscoverVersions();
-            var hooksDiscovery = new DiscoverHooks();
+            var hooksDiscovery = new DiscoverHooks(envVariables);
             var appSpecGenerator = new AppSpecGenerator(versionDiscovery, hooksDiscovery);
             var zipFileWrapper = new ZipFileWrapper();
-            return new PackageCommand(log, fileSystem, parameters, appSpecGenerator, zipFileWrapper);
+            return new PackageCommand(log, fileSystem, parameters, appSpecGenerator, zipFileWrapper, envVariables);
         }
     }
 }

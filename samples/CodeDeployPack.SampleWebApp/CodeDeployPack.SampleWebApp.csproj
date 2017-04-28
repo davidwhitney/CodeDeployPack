@@ -68,6 +68,7 @@
   <ItemGroup>
     <Content Include="HtmlPage1.html" />
     <Content Include="packages.config" />
+    <Content Include=".deploy\before-install.ps1" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

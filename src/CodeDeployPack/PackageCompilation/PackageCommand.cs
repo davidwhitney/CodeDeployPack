@@ -15,26 +15,21 @@ namespace CodeDeployPack.PackageCompilation
         private readonly CreateCodeDeployTaskParameters _parameters;
         private readonly IAppSpecGenerator _appSpecGenerator;
         private readonly IZipFile _zipFile;
+        private readonly PackingEnvironmentVariables _variables;
 
         public PackageCommand(ILog log, IFileSystem fileSystem, CreateCodeDeployTaskParameters parameters,
-                              IAppSpecGenerator appSpecGenerator, IZipFile zipFile)
+                              IAppSpecGenerator appSpecGenerator, IZipFile zipFile, PackingEnvironmentVariables variables)
         {
             _log = log;
             _fileSystem = fileSystem;
             _parameters = parameters;
             _appSpecGenerator = appSpecGenerator;
             _zipFile = zipFile;
+            _variables = variables;
         }
 
         public string Execute()
         {
-            var packing = CreateEmptyOutputDirectory("packing");
-            var packed = CreateEmptyOutputDirectory("packed");
-            CreateEmptyOutputDirectory("packing\\app");
-
-            var packingDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing");
-            var appRootDirectory = Path.Combine(_parameters.ProjectDirectory, "obj", "packing", "app");
-
             var writtenFiles = _parameters.WrittenFiles ?? new ITaskItem[0];
             var binaries = new List<ITaskItem>(writtenFiles);
 
@@ -48,12 +43,12 @@ namespace CodeDeployPack.PackageCompilation
             packager.Package(_parameters, _parameters.ContentFiles, binaries, _parameters.ProjectDirectory, _parameters.OutDir);
 
             var specFile = _appSpecGenerator.CreateAppSpec(packager.IndexedFiles, _parameters);
-            _fileSystem.File.WriteAllText(Path.Combine(packingDirectory, "appspec.yml"), specFile);
+            _fileSystem.File.WriteAllText(Path.Combine(_variables.PackingDirectory, "appspec.yml"), specFile);
 
-            StageFiles(appRootDirectory, packager);
+            StageFiles(_variables.AppRootDirectory, packager);
 
-            var zipTargetPath = Path.Combine(packed, "CodeDeploy.zip");
-            _zipFile.CreateFromDirectory(packing, zipTargetPath);
+            var zipTargetPath = Path.Combine(_variables.Packed, "CodeDeploy.zip");
+            _zipFile.CreateFromDirectory(_variables.Packing, zipTargetPath);
 
             return zipTargetPath;
         }
@@ -86,18 +81,5 @@ namespace CodeDeployPack.PackageCompilation
             }
         }
 
-        private string CreateEmptyOutputDirectory(string name)
-        {
-            var temp = Path.Combine(_parameters.ProjectDirectory, "obj", name);
-            _log.LogMessage("Create directory: " + temp, MessageImportance.Low);
-
-            if (_fileSystem.Directory.Exists(temp))
-            {
-                _fileSystem.Directory.Delete(temp, true);
-            }
-
-            _fileSystem.Directory.CreateDirectory(temp);
-            return temp;
-        }
     }
 }

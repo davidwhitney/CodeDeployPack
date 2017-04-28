@@ -24,7 +24,8 @@ namespace CodeDeployPack.Test.Unit
 
             WebAppInFileSystem();
             _fakeZipFileWrapper = new FakeZipFileWrapper(_fs);
-            _cmd = new PackageCommand(_logger, _fs, _paramz, new FakeSpecGenerator(), _fakeZipFileWrapper);
+            var variables = new PackingEnvironmentVariablesFactory(_logger, _paramz, _fs).GetConfig();
+            _cmd = new PackageCommand(_logger, _fs, _paramz, new FakeSpecGenerator(), _fakeZipFileWrapper, variables);
         }
 
         [Test]

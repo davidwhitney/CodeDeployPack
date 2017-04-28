@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CodeDeployPack.AppSpecCreation;
+using CodeDeployPack.PackageCompilation;
 using NUnit.Framework;
 
 namespace CodeDeployPack.Test.Unit.AppSpecCreation
@@ -10,10 +11,18 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
     [TestFixture]
     public class DiscoverHooksTests
     {
+        private PackingEnvironmentVariables _envVars;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _envVars = new PackingEnvironmentVariables {LocationOfAppInArchive = "app"};
+        }
+
         [Test]
         public void Discover_ReturnsHooksInstance()
         {
-            var discoverer = new DiscoverHooks();
+            var discoverer = new DiscoverHooks(_envVars);
             var hooks = discoverer.Discover(new string[0]);
             Assert.That(hooks, Is.Not.Null);
         }
@@ -21,7 +30,7 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
         [Test]
         public void Discover_ThrowsOnNullArgument()
         {
-            Assert.Throws<ArgumentNullException>(() => new DiscoverHooks().Discover(null));
+            Assert.Throws<ArgumentNullException>(() => new DiscoverHooks(_envVars).Discover(null));
         }
 
         [Test]
@@ -39,14 +48,14 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
                 path1,
                 path2
             };
-            var exception = Assert.Throws<InvalidOperationException>(() => new DiscoverHooks().Discover(files));
-            Assert.That(exception.Message, Is.EqualTo($"Unable to add hook '{path2}'. The hook of the same type '{path1}' is already present."));
+            var exception = Assert.Throws<InvalidOperationException>(() => new DiscoverHooks(_envVars).Discover(files));
+            Assert.That(exception.Message, Is.EqualTo($"Unable to add hook '{path2}'. The hook of the same type 'app\\{path1}' is already present."));
         }
 
         [Test]
         public void Discover_ReturnsPopulatedHooksInstanceWithDiscoveredHooks()
         {
-            var discoverer = new DiscoverHooks();
+            var discoverer = new DiscoverHooks(_envVars);
             var beforeInstallPath = Path.Combine("target", ".deploy", "before-install.ps1");
             var afterInstallPath = Path.Combine("target", ".deploy", "after-install.ps1");
             var applicationStartPath = Path.Combine("target", ".deploy", "application-start.ps1");
@@ -63,17 +72,17 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
             };
 
             var hooks = discoverer.Discover(files);
-            AssertHook(hooks.BeforeInstall, beforeInstallPath);
-            AssertHook(hooks.AfterInstall, afterInstallPath);
-            AssertHook(hooks.ApplicationStart, applicationStartPath);
-            AssertHook(hooks.ApplicationStop, applicationStopPath);
-            AssertHook(hooks.ValidateService, validateServicePath);
+            AssertHook(hooks.BeforeInstall, _envVars.LocationOfAppInArchive + "\\" + beforeInstallPath);
+            AssertHook(hooks.AfterInstall, _envVars.LocationOfAppInArchive + "\\" + afterInstallPath);
+            AssertHook(hooks.ApplicationStart, _envVars.LocationOfAppInArchive + "\\" + applicationStartPath);
+            AssertHook(hooks.ApplicationStop, _envVars.LocationOfAppInArchive + "\\" + applicationStopPath);
+            AssertHook(hooks.ValidateService, _envVars.LocationOfAppInArchive + "\\" + validateServicePath);
         }
 
         [Test]
         public void Discover_LooksForHooksOnlyInspecifiedLocation()
         {
-            var discoverer = new DiscoverHooks();
+            var discoverer = new DiscoverHooks(_envVars);
             var beforeInstallPath = Path.Combine("target", "before-install.ps1");
             var afterInstallPath = Path.Combine("target", "after-install.ps1");
             var applicationStartPath = Path.Combine("target", "application-start.ps1");
