@@ -35,6 +35,16 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
         }
 
         [Test]
+        public void CreateAppSpec_WithVersionOverridden_ReturnsSpecWithVersion()
+        {
+            _versionFake.Version = "1.9.9.9";
+            _parameters.PackageVersion = "1.0.0";
+            var spec = _gen.CreateAppSpec(_contents, _parameters);
+
+            Assert.That(spec, Does.Contain("version: 1.0.0"));
+        }
+
+        [Test]
         public void CreateAppSpec_WithProjectName_ProjectNameOutput()
         {
             _parameters.ProjectName = "MyCoolApp";

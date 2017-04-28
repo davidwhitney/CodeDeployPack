@@ -61,7 +61,6 @@
     <Compile Include="AppSpecCreation\IDiscoverVersions.cs" />
     <Compile Include="CreateCodeDeployPackage.cs" />
     <Compile Include="CreateCodeDeployTaskParameters.cs" />
-    <Compile Include="GetAssemblyVersionInfo.cs" />
     <Compile Include="Logging\ILog.cs" />
     <Compile Include="Logging\Logger.cs" />
     <Compile Include="PackageCompilation\PackageCommandFactory.cs" />
