@@ -34,18 +34,6 @@
   Create CodeDeploy package
   -->
   <Target Name="CodeDeployPack" Condition="$(RunCodeDeployPack)">
-    <GetAssemblyVersionInfo UseFileVersion="$(CodeDeployPackUseFileVersion)" UseProductVersion="$(CodeDeployPackUseProductVersion)" AssemblyFiles="$(TargetPath)" Condition="'$(CodeDeployPackPackageVersion)' == ''">
-      <Output TaskParameter="AssemblyVersionInfo" ItemName="AssemblyVersions"/>
-    </GetAssemblyVersionInfo>
-    <PropertyGroup>
-      <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''">%(AssemblyVersions.Version)</CodeDeployPackPackageVersion>
-    </PropertyGroup>
-    <PropertyGroup>
-      <CodeDeployPackPackageVersion Condition="'$(CodeDeployPackPackageVersion)' == ''"><!-- Use the value from nuspec, or 1.0.0 if not in NuSpec --></CodeDeployPackPackageVersion>
-    </PropertyGroup>
-	
-    <Message Text="Using package version: $(CodeDeployPackPackageVersion)" />
-
     <ItemGroup>
       <CodeDeployPackWrittenFiles Include="@(FileWrites)" Exclude="$(IntermediateOutputPath)**\*" />
       <CodeDeployPackWrittenFiles Include="@(FileWritesShareable)" Exclude="$(IntermediateOutputPath)**\*" />

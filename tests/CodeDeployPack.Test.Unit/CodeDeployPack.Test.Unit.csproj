@@ -61,6 +61,8 @@
     <Compile Include="AppSpecCreation\AppSpecGeneratorTests.cs" />
     <Compile Include="AppSpecCreation\DiscoverHooksTests.cs" />
     <Compile Include="TestDoubles\FakeDiscoverHooks.cs" />
+    <Compile Include="AppSpecCreation\DiscoverVersionsTests.cs" />
+    <Compile Include="TestDoubles\FakeAssembly.cs" />
     <Compile Include="TestDoubles\FakeVersionDiscoverer.cs" />
     <Compile Include="CreateCodeDeployPackageTests.cs" />
     <Compile Include="TestDoubles\FakeLogger.cs" />

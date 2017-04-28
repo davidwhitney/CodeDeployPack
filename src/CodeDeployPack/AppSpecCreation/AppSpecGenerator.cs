@@ -19,7 +19,7 @@ namespace CodeDeployPack.AppSpecCreation
 
         public string CreateAppSpec(Dictionary<string, string> packageContents, CreateCodeDeployTaskParameters parameters)
         {
-            var version = _versionDiscovery.GetVersion();
+            var version = parameters.PackageVersion ?? _versionDiscovery.GetVersion();
             var basePath = "c:\\app";
             var appName = parameters.ProjectName ?? "";
             var appPath = Path.Combine(basePath, appName, version);
