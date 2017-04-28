@@ -9,14 +9,14 @@ namespace CodeDeployPack.AppSpecCreation
     {
         private const string ScriptsDirectoryConvention = ".deploy";
 
-        private readonly List<(string fileNameWithoutExt, Action<Hooks, string> aggregateFn)> _mappers =
-            new List<(string fileNameWithoutExt, Action<Hooks, string> aggregateFn)>
+        private readonly List<(string fileNameWithoutExt, Func<Hooks, List<Hook>> collectionProvider)> _mappers =
+            new List<(string fileNameWithoutExt, Func<Hooks, List<Hook>> collectionProvider)>
             {
-                ("before-install", AddBeforeInstallHook),
-                ("after-install", AddAfterInstallHook),
-                ("application-start", AddApplicationStartHook),
-                ("application-stop", AddApplicationStopHook),
-                ("validate-service", AddValidateServiceHook),
+                ("before-install", x => x.BeforeInstall),
+                ("after-install", x => x.AfterInstall),
+                ("application-start", x => x.ApplicationStart),
+                ("application-stop", x => x.ApplicationStop),
+                ("validate-service", x => x.ValidateService)
             };
 
         private static void AddHook(List<Hook> list, string path)
@@ -26,30 +26,6 @@ namespace CodeDeployPack.AppSpecCreation
             list.Add(ToHook(path));
         }
 
-        private static void AddValidateServiceHook(Hooks hooks, string path)
-        {
-            AddHook(hooks.ValidateService, path);
-        }
-
-        private static void AddApplicationStopHook(Hooks hooks, string path)
-        {
-            AddHook(hooks.ApplicationStop, path);
-        }
-
-        private static void AddApplicationStartHook(Hooks hooks, string path)
-        {
-            AddHook(hooks.ApplicationStart, path);
-        }
-
-        private static void AddAfterInstallHook(Hooks hooks, string path)
-        {
-            AddHook(hooks.AfterInstall, path);
-        }
-
-        private static void AddBeforeInstallHook(Hooks hooks, string path)
-        {
-            AddHook(hooks.BeforeInstall, path);
-        }
         private static Hook ToHook(string path)
         {
             return new Hook { location = path };
@@ -70,12 +46,13 @@ namespace CodeDeployPack.AppSpecCreation
             if (!IsScriptsDirectory(destinationPath))
                 return;
 
-            var aggregator = _mappers
+            var targetCollection = _mappers
                 .Where(mapper => DoesFileNameMatch(mapper.fileNameWithoutExt, destinationPath))
-                .Select(mapper => mapper.aggregateFn)
+                .Select(mapper => mapper.collectionProvider(hooks))
                 .FirstOrDefault();
 
-            aggregator?.Invoke(hooks, destinationPath);
+            if (targetCollection != null)
+                AddHook(targetCollection, destinationPath);
         }
 
         private bool DoesFileNameMatch(string expectedFileNameWithoutExtension, string destinationPath)
