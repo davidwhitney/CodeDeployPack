@@ -16,5 +16,6 @@
   </metadata>
   <files>
     <file src="CodeDeployPack.targets" target="build\CodeDeployPack.targets" />
+    <file src="bin\$configuration$\*.dll" target="build\bin\Debug" />
   </files>
 </package>
