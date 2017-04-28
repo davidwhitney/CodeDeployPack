@@ -54,6 +54,9 @@
   <ItemGroup>
     <Compile Include="AppSpecCreation\AppSpec.cs" />
     <Compile Include="AppSpecCreation\AppSpecGenerator.cs" />
+    <Compile Include="AppSpecCreation\DiscoverVersions.cs" />
+    <Compile Include="AppSpecCreation\IAppSpecGenerator.cs" />
+    <Compile Include="AppSpecCreation\IDiscoverVersions.cs" />
     <Compile Include="CreateCodeDeployPackage.cs" />
     <Compile Include="CreateCodeDeployTaskParameters.cs" />
     <Compile Include="GetAssemblyVersionInfo.cs" />

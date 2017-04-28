@@ -3,11 +3,6 @@ using YamlDotNet.Serialization;
 
 namespace CodeDeployPack.AppSpecCreation
 {
-    public interface IAppSpecGenerator
-    {
-        string CreateAppSpec(Dictionary<string, string> packageContents);
-    }
-
     public class AppSpecGenerator : IAppSpecGenerator
     {
         private readonly IDiscoverVersions _versionDiscovery;
@@ -34,19 +29,6 @@ namespace CodeDeployPack.AppSpecCreation
             };
 
             return new SerializerBuilder().EmitDefaults().Build().Serialize(appSpec);
-        }
-    }
-
-    public interface IDiscoverVersions
-    {
-        string GetVersion();
-    }
-
-    public class DiscoverVersions : IDiscoverVersions
-    {
-        public string GetVersion()
-        {
-            return "1.0.0.0";
         }
     }
 }
