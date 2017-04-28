@@ -30,8 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Framework">
       <HintPath>..\..\packages\Microsoft.Build.Framework.14.3.0\lib\net45\Microsoft.Build.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.7.8.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Moq.4.7.8\lib\net45\Moq.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
@@ -53,6 +59,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSpecCreation\AppSpecGeneratorTests.cs" />
+    <Compile Include="AppSpecCreation\DiscoverHooksTests.cs" />
+    <Compile Include="TestDoubles\FakeDiscoverHooks.cs" />
     <Compile Include="TestDoubles\FakeVersionDiscoverer.cs" />
     <Compile Include="CreateCodeDeployPackageTests.cs" />
     <Compile Include="TestDoubles\FakeLogger.cs" />

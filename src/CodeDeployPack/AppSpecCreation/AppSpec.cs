@@ -16,6 +16,7 @@ namespace CodeDeployPack.AppSpecCreation
         public List<Hook> BeforeInstall { get; set; } = new List<Hook>();
         public List<Hook> AfterInstall { get; set; } = new List<Hook>();
         public List<Hook> ApplicationStart { get; set; } = new List<Hook>();
+        public List<Hook> ApplicationStop { get; set; } = new List<Hook>();
         public List<Hook> ValidateService { get; set; } = new List<Hook>();
     }
 
