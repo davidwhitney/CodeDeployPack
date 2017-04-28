@@ -45,7 +45,7 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
 
             var spec = _gen.CreateAppSpec(_contents, _parameters);
 
-            Assert.That(spec, Does.Contain(@"    destination: c:\app\MyCoolApp\"));
+            Assert.That(spec, Does.Contain(@"    destination: c:\app\MyCoolApp\0.0.0.0"));
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
 os: windows
 files:
   - source: app
-    destination: c:\app\
+    destination: c:\app\0.0.0.0\
 hooks:"));
         }
     }

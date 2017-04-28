@@ -17,7 +17,7 @@ namespace CodeDeployPack.AppSpecCreation
             var version = _versionDiscovery.GetVersion();
             var basePath = "c:\\app";
             var appName = parameters.ProjectName ?? "";
-            var appPath = Path.Combine(basePath, appName);
+            var appPath = Path.Combine(basePath, appName, version);
             var template = @"version: {version}
 os: windows
 files:
@@ -28,14 +28,6 @@ hooks:";
             return template
                 .Replace("{version}", version)
                 .Replace("{appPath}", appPath);
-        }
-
-        private static string CharactersBeforeAnyDash(string line)
-        {
-            var firstIndexOfDash = line.IndexOf("-");
-            firstIndexOfDash = firstIndexOfDash > 0 ? firstIndexOfDash : 0;
-            var upToDash = line.Substring(0, firstIndexOfDash);
-            return upToDash;
         }
     }
 }
