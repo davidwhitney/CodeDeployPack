@@ -101,6 +101,7 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
         {
             Assert.That(hooks, Is.Not.Null);
             Assert.That(hooks.Select(h => h.location), Is.EquivalentTo(expectedPaths));
+            Assert.True(hooks.All(x => x.timeout == 180), "Expected default timeout");
         }
     }
 }

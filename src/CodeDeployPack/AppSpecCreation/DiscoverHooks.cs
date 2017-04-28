@@ -28,7 +28,7 @@ namespace CodeDeployPack.AppSpecCreation
 
         private static Hook ToHook(string path)
         {
-            return new Hook { location = path };
+            return new Hook { location = path, timeout = 180};
         }
 
         public Hooks Discover(IEnumerable<string> destinationPaths)
