@@ -11,10 +11,12 @@ namespace CodeDeployPack.AppSpecCreation
     public class AppSpecGenerator : IAppSpecGenerator
     {
         private readonly IDiscoverVersions _versionDiscovery;
+        private readonly IDiscoverHooks _hooksDiscovery;
 
-        public AppSpecGenerator(IDiscoverVersions versionDiscovery)
+        public AppSpecGenerator(IDiscoverVersions versionDiscovery, IDiscoverHooks hooksDiscovery)
         {
             _versionDiscovery = versionDiscovery;
+            _hooksDiscovery = hooksDiscovery;
         }
 
         public string CreateAppSpec(Dictionary<string, string> packageContents)
@@ -30,7 +32,8 @@ namespace CodeDeployPack.AppSpecCreation
                         source = "app",
                         destination = $"c:\\CodeDeploy\\{packageId}"
                     }
-                }
+                },
+                hooks = _hooksDiscovery.Discover(packageContents.Values)
             };
 
             return new SerializerBuilder().EmitDefaults().Build().Serialize(appSpec);

@@ -10,7 +10,8 @@ namespace CodeDeployPack.PackageCompilation
         {
             var fileSystem = new FileSystem();
             var versionDiscovery = new DiscoverVersions();
-            var appSpecGenerator = new AppSpecGenerator(versionDiscovery);
+            var hooksDiscovery = new DiscoverHooks();
+            var appSpecGenerator = new AppSpecGenerator(versionDiscovery, hooksDiscovery);
             var zipFileWrapper = new ZipFileWrapper();
             return new PackageCommand(log, fileSystem, parameters, appSpecGenerator, zipFileWrapper);
         }
