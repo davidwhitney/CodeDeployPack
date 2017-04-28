@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using YamlDotNet.Serialization;
+using System.IO;
 
 namespace CodeDeployPack.AppSpecCreation
 {
@@ -12,23 +12,30 @@ namespace CodeDeployPack.AppSpecCreation
             _versionDiscovery = versionDiscovery;
         }
 
-        public string CreateAppSpec(Dictionary<string, string> packageContents)
+        public string CreateAppSpec(Dictionary<string, string> packageContents, CreateCodeDeployTaskParameters parameters)
         {
-            var packageId = "";
+            var version = _versionDiscovery.GetVersion();
+            var basePath = "c:\\app";
+            var appName = parameters.ProjectName ?? "";
+            var appPath = Path.Combine(basePath, appName);
+            var template = @"version: {version}
+os: windows
+files:
+  - source: app
+    destination: {appPath}\
+hooks:";
 
-            var appSpec = new AppSpec
-            {
-                files = new List<FileEntry>
-                {
-                    new FileEntry
-                    {
-                        source = "app",
-                        destination = $"c:\\CodeDeploy\\{packageId}"
-                    }
-                }
-            };
+            return template
+                .Replace("{version}", version)
+                .Replace("{appPath}", appPath);
+        }
 
-            return new SerializerBuilder().EmitDefaults().Build().Serialize(appSpec);
+        private static string CharactersBeforeAnyDash(string line)
+        {
+            var firstIndexOfDash = line.IndexOf("-");
+            firstIndexOfDash = firstIndexOfDash > 0 ? firstIndexOfDash : 0;
+            var upToDash = line.Substring(0, firstIndexOfDash);
+            return upToDash;
         }
     }
 }

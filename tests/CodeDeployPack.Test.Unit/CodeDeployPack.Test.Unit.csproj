@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSpecCreation\AppSpecGeneratorTests.cs" />
+    <Compile Include="TestDoubles\FakeVersionDiscoverer.cs" />
     <Compile Include="CreateCodeDeployPackageTests.cs" />
     <Compile Include="TestDoubles\FakeLogger.cs" />
     <Compile Include="TestDoubles\FakeSpecGenerator.cs" />

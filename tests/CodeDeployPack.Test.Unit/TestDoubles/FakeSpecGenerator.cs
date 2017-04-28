@@ -5,7 +5,7 @@ namespace CodeDeployPack.Test.Unit.TestDoubles
 {
     public class FakeSpecGenerator : IAppSpecGenerator
     {
-        public string CreateAppSpec(Dictionary<string, string> packageContents)
+        public string CreateAppSpec(Dictionary<string, string> packageContents, CreateCodeDeployTaskParameters parameters)
         {
             return "";
         }
