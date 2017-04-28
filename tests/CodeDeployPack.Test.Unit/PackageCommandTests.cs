@@ -92,7 +92,8 @@ namespace CodeDeployPack.Test.Unit
                 {
                     new TaskItem {ItemSpec = "bin\\WebApp.dll"},
                     new TaskItem {ItemSpec = "bin\\WebApp.pdb"}
-                }
+                },
+                OutDir = "bin\\"
             };
         }
     }

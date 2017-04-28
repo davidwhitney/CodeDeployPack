@@ -1,55 +1,33 @@
 ﻿using System.Collections.Generic;
-using YamlDotNet.Serialization;
+using System.IO;
 
 namespace CodeDeployPack.AppSpecCreation
 {
-    public interface IAppSpecGenerator
-    {
-        string CreateAppSpec(Dictionary<string, string> packageContents);
-    }
-
     public class AppSpecGenerator : IAppSpecGenerator
     {
         private readonly IDiscoverVersions _versionDiscovery;
-        private readonly IDiscoverHooks _hooksDiscovery;
 
-        public AppSpecGenerator(IDiscoverVersions versionDiscovery, IDiscoverHooks hooksDiscovery)
+        public AppSpecGenerator(IDiscoverVersions versionDiscovery)
         {
             _versionDiscovery = versionDiscovery;
-            _hooksDiscovery = hooksDiscovery;
         }
 
-        public string CreateAppSpec(Dictionary<string, string> packageContents)
+        public string CreateAppSpec(Dictionary<string, string> packageContents, CreateCodeDeployTaskParameters parameters)
         {
-            var packageId = "";
+            var version = _versionDiscovery.GetVersion();
+            var basePath = "c:\\app";
+            var appName = parameters.ProjectName ?? "";
+            var appPath = Path.Combine(basePath, appName, version);
+            var template = @"version: {version}
+os: windows
+files:
+  - source: app
+    destination: {appPath}\
+hooks:";
 
-            var appSpec = new AppSpec
-            {
-                files = new List<FileEntry>
-                {
-                    new FileEntry
-                    {
-                        source = "app",
-                        destination = $"c:\\CodeDeploy\\{packageId}"
-                    }
-                },
-                hooks = _hooksDiscovery.Discover(packageContents.Values)
-            };
-
-            return new SerializerBuilder().EmitDefaults().Build().Serialize(appSpec);
-        }
-    }
-
-    public interface IDiscoverVersions
-    {
-        string GetVersion();
-    }
-
-    public class DiscoverVersions : IDiscoverVersions
-    {
-        public string GetVersion()
-        {
-            return "1.0.0.0";
+            return template
+                .Replace("{version}", version)
+                .Replace("{appPath}", appPath);
         }
     }
 }

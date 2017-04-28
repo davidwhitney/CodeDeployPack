@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeDeployPack.AppSpecCreation;
-using Moq;
+using CodeDeployPack.Test.Unit.TestDoubles;
 using NUnit.Framework;
 
 namespace CodeDeployPack.Test.Unit.AppSpecCreation
@@ -14,34 +14,51 @@ namespace CodeDeployPack.Test.Unit.AppSpecCreation
     [TestFixture]
     public class AppSpecGeneratorTests
     {
-        [Test]
-        public void A()
+        private FakeVersionDiscoverer _versionFake;
+        private AppSpecGenerator _gen;
+        private CreateCodeDeployTaskParameters _parameters;
+        private Dictionary<string, string> _contents;
+
+        [SetUp]
+        public void SetUp()
         {
-            var asg = new AppSpecGenerator(null, null);
-            var packageContents = new Dictionary<string, string>();
-
-            var spec = asg.CreateAppSpec(packageContents);
-
-            Assert.That(spec, Is.Not.Null);
+            _versionFake = new FakeVersionDiscoverer();
+            _gen = new AppSpecGenerator(_versionFake);
+            _contents = new Dictionary<string, string>();
+            _parameters = new CreateCodeDeployTaskParameters();
         }
 
         [Test]
-        public void CreateAppSpec_DiscoversHooks()
+        public void CreateAppSpec_WithVersionDetected_ReturnsSpecWithVersion()
         {
-            var discoverHooks = new Mock<IDiscoverHooks>();
-            var packageContents = new Dictionary<string, string> { { "srcFoo", "dstFoo" }, { "srcBar", "dstBar" } };
-            var destinationFiles = packageContents.Values;
+            _versionFake.Version = "1.9.9.9";
 
-            discoverHooks
-                .Setup(h => h.Discover(destinationFiles))
-                .Returns(new Hooks())
-                .Verifiable();
+            var spec = _gen.CreateAppSpec(_contents, _parameters);
 
-            var asg = new AppSpecGenerator(null, discoverHooks.Object);
+            Assert.That(spec, Does.Contain("version: 1.9.9.9"));
+        }
 
-            asg.CreateAppSpec(packageContents);
+        [Test]
+        public void CreateAppSpec_WithProjectName_ProjectNameOutput()
+        {
+            _parameters.ProjectName = "MyCoolApp";
 
-            discoverHooks.VerifyAll();
+            var spec = _gen.CreateAppSpec(_contents, _parameters);
+
+            Assert.That(spec, Does.Contain(@"    destination: c:\app\MyCoolApp\0.0.0.0"));
+        }
+
+        [Test]
+        public void CreateAppSpec_WithSomeContents_ReturnsSpec()
+        {
+            var spec = _gen.CreateAppSpec(_contents, _parameters);
+
+            Assert.That(spec, Is.EqualTo(@"version: 0.0.0.0
+os: windows
+files:
+  - source: app
+    destination: c:\app\0.0.0.0\
+hooks:"));
         }
     }
 }

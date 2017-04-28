@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using YamlDotNet.RepresentationModel;
 
 namespace CodeDeployPack.AppSpecCreation
 {

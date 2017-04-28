@@ -47,7 +47,7 @@ namespace CodeDeployPack.PackageCompilation
             var packager = packagers.First(x => x.IsApplicable(_parameters.ContentFiles));
             packager.Package(_parameters, _parameters.ContentFiles, binaries, _parameters.ProjectDirectory, _parameters.OutDir);
 
-            var specFile = _appSpecGenerator.CreateAppSpec(packager.IndexedFiles);
+            var specFile = _appSpecGenerator.CreateAppSpec(packager.IndexedFiles, _parameters);
             _fileSystem.File.WriteAllText(Path.Combine(packingDirectory, "appspec.yml"), specFile);
 
             StageFiles(appRootDirectory, packager);

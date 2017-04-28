@@ -50,15 +50,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\YamlDotNet.4.1.0\lib\net35\YamlDotNet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSpecCreation\AppSpec.cs" />
     <Compile Include="AppSpecCreation\AppSpecGenerator.cs" />
     <Compile Include="AppSpecCreation\DiscoverHooks.cs" />
     <Compile Include="AppSpecCreation\IDiscoverHooks.cs" />
+    <Compile Include="AppSpecCreation\DiscoverVersions.cs" />
+    <Compile Include="AppSpecCreation\IAppSpecGenerator.cs" />
+    <Compile Include="AppSpecCreation\IDiscoverVersions.cs" />
     <Compile Include="CreateCodeDeployPackage.cs" />
     <Compile Include="CreateCodeDeployTaskParameters.cs" />
     <Compile Include="GetAssemblyVersionInfo.cs" />
