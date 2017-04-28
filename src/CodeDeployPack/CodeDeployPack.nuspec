@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>CodeDeployPack</id>
-    <title>CodeDeployPack</title>
-    <version>1.0.0</version>
+    <id>$id$</id>
+    <title>$id$</title>
+    <version>$version$</version>
     <authors>David Whitney et al, Octopus Deploy (Lineage)</authors>
     <owners>David Whitney</owners>
     <summary>Build CodeDeploy-compatible packages from your projects.</summary>
@@ -16,6 +16,5 @@
   </metadata>
   <files>
     <file src="CodeDeployPack.targets" target="build\CodeDeployPack.targets" />
-    <file src="AddRemoveScripts\*" target="tools" />
   </files>
 </package>

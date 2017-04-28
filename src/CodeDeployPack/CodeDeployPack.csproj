@@ -72,12 +72,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AddRemoveScripts\Install.ps1" />
-    <None Include="AddRemoveScripts\Uninstall.ps1" />
-    <None Include="packages.config" />
-    <None Include="CodeDeployPack.targets">
+    <None Include="CodeDeployPack.nuspec">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
+    <Content Include="CodeDeployPack.targets">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
