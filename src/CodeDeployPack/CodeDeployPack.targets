@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <UsingTask TaskName="CodeDeployPack.CreateCodeDeployPackage" AssemblyFile="bin\Debug\CodeDeployPack.dll" />
-  <UsingTask TaskName="CodeDeployPack.GetAssemblyVersionInfo" AssemblyFile="bin\Debug\CodeDeployPack.dll" />
+  <UsingTask TaskName="CodeDeployPack.CreateCodeDeployPackage" AssemblyFile="bin\Debug\CodeDeployPack.dll" Condition="$(DefineConstants.Contains('CODE_DEPLOY_PACK_DEBUG'))" />
+  <UsingTask TaskName="CodeDeployPack.CreateCodeDeployPackage" AssemblyFile="CodeDeployPack.dll" Condition="$(DefineConstants.Contains('CODE_DEPLOY_PACK_DEBUG')) == false" />
 
   <!-- Hook into the AfterBuild activity -->
   <PropertyGroup>
