@@ -16,7 +16,7 @@ Adds scripts to your CodeDeploy manifest file based on standard conventions.
 
 
 ```bash
-    msbuild /t:Clean;Build /p:RunCodeDeployPack=true
+msbuild /t:Clean;Build /p:RunCodeDeployPack=true
 ```
 
 Result:
