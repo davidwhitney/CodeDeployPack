@@ -3,5 +3,6 @@
     <IgnoredTests>
       <AllTestsSelector />
     </IgnoredTests>
+    <PreviouslyBuiltSuccessfully>True</PreviouslyBuiltSuccessfully>
   </Settings>
 </ProjectConfiguration>

@@ -16,7 +16,7 @@
   <PropertyGroup>
     <CodeDeployPackImported>true</CodeDeployPackImported>
 
-    <RunCodeDeployPack Condition="'$(RunCodeDeployPack)'==''">true</RunCodeDeployPack>
+    <RunCodeDeployPack Condition="'$(RunCodeDeployPack)'==''">false</RunCodeDeployPack>
     <CodeDeployPackIncludeTypeScriptSourceFiles Condition="'$(CodeDeployPackIncludeTypeScriptSourceFiles)'==''">false</CodeDeployPackIncludeTypeScriptSourceFiles>
     <CodeDeployPackPublishPackageToFileShare Condition="'$(CodeDeployPackPublishPackageToFileShare)' == ''"></CodeDeployPackPublishPackageToFileShare>
     <CodeDeployPackPublishPackageToHttp Condition="'$(CodeDeployPackPublishPackageToHttp)' == ''"></CodeDeployPackPublishPackageToHttp>
